@@ -10,16 +10,21 @@ from typing import List, Optional
 from processo import Processo
 
 # Configuração do logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def executar_processo(id: int, total_processos: int, valor_proposta: Optional[int] = None):
     processo = Processo(id, total_processos)
+    # Se um valor foi proposto, inicia o processo de consenso
     if valor_proposta is not None:
-        # Se um valor foi proposto, inicia o processo de consenso
-        resultado = processo.propor(valor_proposta)
+        resultado = None
+        rodadas_count = 0
+        while resultado is None:
+            rodadas_count += 1
+            resultado = processo.propor(valor_proposta)
         processo.logger.info(f"Resultado final = {resultado}")
+    
+    # Caso contrário, executa como um aceitador
     else:
-        # Caso contrário, executa como um aceitador
         processo.executar()
 
 if __name__ == "__main__":

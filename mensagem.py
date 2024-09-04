@@ -11,8 +11,9 @@ class TipoMensagem(Enum):
 
 # Classe para representar as mensagens trocadas entre os processos
 class Mensagem:
-    def __init__(self, tipo: TipoMensagem, remetente: int, numero: int, valor: Optional[int] = None):
+    def __init__(self, tipo: TipoMensagem, remetente: int, numero: int, valor: Optional[int] = None, proposta_aceita: Optional[bool] = None):
         self.tipo = tipo          # Tipo da mensagem (PREPARE, PROMISE, etc.)
         self.remetente = remetente # ID do processo que enviou a mensagem
         self.numero = numero       # Número da proposta
         self.valor = valor         # Valor proposto (pode ser None em algumas mensagens)
+        self.proposta_aceita = proposta_aceita # Proposta já aceita pelo aceitador (usado na mensagem PROMISE)
