@@ -23,6 +23,8 @@ Dessa forma, basicamente temos que: **Processos** utilizam o **Comunicador** par
 ## Como Compilar e Executar o Projeto
 1. Certifique-se de ter Python instalado em sua máquina.
 2. Navegue até o diretório raíz do projeto.
-3. Execute o script principal usando o comando: `python main.py`.
+3. Instale todas as dependências necessárias usando o comando: `pip install -r requirements.txt`
+4. Crie um arquivo `.env` na raíz do projeto e preencha as variáveis de ambientes necessárias, conforme listado no arquivo `.env.example`
+5. Execute o script principal usando o comando: `python main.py`.
 
 *Obs: As ações e decisões dos processos serão registradas em tempo real no console, facilitando a análise do fluxo do algoritmo.*
