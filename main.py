@@ -8,14 +8,15 @@ import random
 import logging
 from typing import List, Optional
 from processo import Processo
+from time import sleep
 
 # Configuração do logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 def executar_processo(id: int, total_processos: int, valor_proposta: Optional[int] = None):
     processo = Processo(id, total_processos)
-    # Se um valor foi proposto, inicia o processo de consenso
     if valor_proposta is not None:
+        sleep(2)
         resultado = None
         rodadas_count = 0
         while resultado is None:
