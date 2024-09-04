@@ -1,10 +1,14 @@
+import os
 import socket
 import pickle
 from typing import Optional
 from mensagem import Mensagem
+from dotenv import load_dotenv
 
-PORTA_BASE = 5000  # Porta base para comunicação
-TIMEOUT = 2.0      # Timeout para operações de socket
+load_dotenv()   
+PORTA_BASE = int(os.getenv('PORTA_BASE')) 
+TIMEOUT = float(os.getenv('TIMEOUT'))     
+
 
 class Comunicador:
     def __init__(self, id: int):
