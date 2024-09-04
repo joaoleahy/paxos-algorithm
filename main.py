@@ -6,6 +6,7 @@ import os
 import multiprocessing as mp
 import random
 import logging
+import argparse
 from typing import List, Optional
 from processo import Processo
 from time import sleep
@@ -13,8 +14,8 @@ from time import sleep
 # Configuração do logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-def executar_processo(id: int, total_processos: int, valor_proposta: Optional[int] = None):
-    processo = Processo(id, total_processos)
+def executar_processo(id: int, total_processos: int, valor_proposta: Optional[int] = None, processo_com_erro: int = -1):
+    processo = Processo(id, total_processos, processo_com_erro)
     if valor_proposta is not None:
         sleep(2)
         resultado = None
@@ -29,6 +30,10 @@ def executar_processo(id: int, total_processos: int, valor_proposta: Optional[in
         processo.executar()
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Executa o algoritmo Paxos com a opção de forçar erro em um processo específico.")
+    parser.add_argument("--processo-com-erro", type=int, default=-1, help="ID do processo que deve ter um erro forçado")
+    args = parser.parse_args()
+
     TOTAL_PROCESSOS_NUM = int(os.getenv('TOTAL_PROCESSOS_NUM'))
     PROPOSITORES_ATIVOS_NUM = int(os.getenv('PROPOSITORES_ATIVOS_NUM'))
     processos: List[mp.Process] = []
@@ -37,7 +42,7 @@ if __name__ == "__main__":
     for i in range(TOTAL_PROCESSOS_NUM):
         # Os N (PROPOSITORES_ATIVOS_NUM) primeiros processos propõem um valor aleatório, os outros são aceitadores
         valor_proposta = random.randint(1, 100) if i < PROPOSITORES_ATIVOS_NUM else None
-        p = mp.Process(target=executar_processo, args=(i, TOTAL_PROCESSOS_NUM, valor_proposta))
+        p = mp.Process(target=executar_processo, args=(i, TOTAL_PROCESSOS_NUM, valor_proposta, args.processo_com_erro))
         processos.append(p)
 
     # Garante a inicialização dos processos aceitadores antes dos propositores

@@ -1,6 +1,7 @@
 import os
 import socket
 import pickle
+import time
 from typing import Optional
 from mensagem import Mensagem
 
@@ -8,8 +9,9 @@ PORTA_BASE = int(os.getenv('PORTA_BASE'))
 TIMEOUT = float(os.getenv('TIMEOUT'))     
 
 class Comunicador:
-    def __init__(self, id: int):
+    def __init__(self, id: int, processo_com_erro: int = -1):
         self.id = id
+        self.processo_com_erro = processo_com_erro
         # Configuração do socket para comunicação via UDP
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(('localhost', PORTA_BASE + self.id))
@@ -17,11 +19,14 @@ class Comunicador:
 
     def enviar_mensagem(self, destino: int, mensagem: Mensagem):
         try:
+            if self.id == self.processo_com_erro:
+                print(f"\033[91mErro forçado: Processo {self.id} dormindo por {TIMEOUT * 2} segundos\033[0m")
+                time.sleep(TIMEOUT + 2)  # Dorme por um tempo maior que o timeout
             # Serializa e envia a mensagem para o processo de destino
             self.socket.sendto(pickle.dumps(mensagem), ('localhost', PORTA_BASE + destino))
             return True
         except Exception as e:
-            print(f"Erro ao enviar a mensagem: {e}")
+            print(f"\033[91mErro ao enviar a mensagem: {e}\033[0m")
             return False
 
     def receber_mensagem(self) -> Optional[Mensagem]:

@@ -4,7 +4,7 @@ from mensagem import TipoMensagem, Mensagem
 from comunicacao import Comunicador
 
 class Processo:
-    def __init__(self, id: int, total_processos: int):
+    def __init__(self, id: int, total_processos: int, processo_com_erro: int = -1):
         self.id = id
         self.total_processos = total_processos
         self.numero_proposta = 0
@@ -13,7 +13,7 @@ class Processo:
         self.numero_aceito = 0
         self.decidido = False
         self.logger = logging.getLogger(f"Processo-{self.id}")
-        self.comunicador = Comunicador(id)
+        self.comunicador = Comunicador(id, processo_com_erro)
 
     def propor(self, valor: int):
         self.numero_proposta = max(self.numero_proposta, self.numero_aceito) + 1
